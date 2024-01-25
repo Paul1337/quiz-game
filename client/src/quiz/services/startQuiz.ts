@@ -1,7 +1,7 @@
 import { GameDifficulty, GameMode } from '../../app/config/gameSettings/gameSettings.model';
 import { createAppAsyncThunk } from '../../app/store/store.model';
 import { axiosInstance } from '../../shared/api/apiInstance';
-import { QuestionScheme, QuizConfig } from '../slices/quizSlice.model';
+import { QuestionScheme, QuizConfig, QuizError } from '../slices/quizSlice.model';
 
 export interface StartQuizResponse {
     quizId: string;
@@ -21,7 +21,7 @@ const ModeMapper: Record<GameMode, string> = {
     [GameMode.NoMistake]: 'firstMistake',
 };
 
-export const thunkStartQuiz = createAppAsyncThunk<StartQuizResponse>(
+export const thunkStartQuiz = createAppAsyncThunk<StartQuizResponse, void, { rejectValue: QuizError }>(
     'quiz/start',
     async (_, thunkApi) => {
         try {
@@ -32,8 +32,12 @@ export const thunkStartQuiz = createAppAsyncThunk<StartQuizResponse>(
             };
             const res = await axiosInstance.post<StartQuizResponse>('/quiz/start', data);
             return res.data;
-        } catch (err) {
-            return thunkApi.rejectWithValue('Что-то пошло не так');
+        } catch (err: any) {
+            const message = err?.response?.data?.message;
+            if (message) {
+                return thunkApi.rejectWithValue(message);
+            }
+            return thunkApi.rejectWithValue(QuizError.Unknown);
         }
     }
 );

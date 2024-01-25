@@ -58,4 +58,13 @@ export class UsersService {
         await newUser.save();
         return newUser;
     }
+
+    async updateOne(userId: string, data: Record<string, any>) {
+        await this.userModel.updateOne(
+            {
+                _id: new Types.ObjectId(userId),
+            },
+            data,
+        );
+    }
 }

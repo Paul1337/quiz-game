@@ -31,14 +31,31 @@ export enum EndQuizReason {
     Error = 'error',
 }
 
+export enum QuizError {
+    NoQuestion = 'NO_QUESTION',
+    Unknown = 'UNKNOWN',
+}
+
+export enum GameStage {
+    Loading = 'loading',
+    PregameTimer = 'pregameTimer',
+    Playing = 'playing',
+    AnswerGiven = 'answerGiven',
+    Finished = 'finished',
+    Error = 'error',
+}
+
 export interface QuizSliceScheme {
     currentQuestion: QuestionScheme | null;
     stat: StatScheme;
-    isLoadingQuestion: boolean;
+
+    gameStage: GameStage;
     isFinished: boolean;
-    isStarted: boolean;
+
     quizId: string;
     quizConfig: QuizConfig | null;
+
     answerStatus: AnswerStatus;
     endReason: EndQuizReason | null;
+    quizError: QuizError | null;
 }

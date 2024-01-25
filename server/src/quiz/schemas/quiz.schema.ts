@@ -71,6 +71,9 @@ export class Quiz {
 
     @Prop({ required: true })
     questionWasAnswered: boolean;
+
+    @Prop({ required: true })
+    correctAnswers: number;
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz);

@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Console } from 'console';
 import { QuestionsModule } from 'src/questions/questions.module';
 import { QuizModule } from 'src/quiz/quiz.module';
+import { LibModule } from 'src/lib/lib.module';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { QuizModule } from 'src/quiz/quiz.module';
                 };
             },
         }),
+        LibModule,
         AuthModule,
         QuestionsModule,
         QuizModule,

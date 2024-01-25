@@ -16,18 +16,21 @@ import { StartQuizDto } from './dto/start-quiz.dto';
 import { QuizDifficulty } from './enums/quiz-difficulty.enum';
 import { EndQuizReason } from './enums/quiz-end-reason.enum';
 import { QuizType } from './enums/quiz-type.enum';
-import { Quiz } from './schemas/quiz.schema';
+import { Quiz, QuizDocument } from './schemas/quiz.schema';
 import { AnswerQuizQuestionResponse } from './responses/answer-quiz-question.response';
 import { GetNextQuestionResponse } from './responses/get-next-question.response';
 import { StartQuizResponse } from './responses/start-quiz.response';
 import { Question, QuestionDocument } from 'src/questions/schemas/question.schema';
 import { QuestionsConverter } from 'src/questions/questions.converter';
+import { UsersService } from 'src/users/users.service';
+import { Errors } from 'src/questions/constants/error.constants';
 
 @Injectable()
 export class QuizService {
     constructor(
         private questionsService: QuestionsService,
         private questionsConverter: QuestionsConverter,
+        private usersService: UsersService,
         @InjectModel(Quiz.name) private quizModel: Model<Quiz>,
     ) {}
 
@@ -46,6 +49,7 @@ export class QuizService {
             roundDifficulty: quizConfig.roundDifficulty,
             isFinished: false,
             questionWasAnswered: false,
+            correctAnswers: 0,
         });
         await newQuiz.save();
 
@@ -56,7 +60,7 @@ export class QuizService {
     }
 
     async endQuiz(endQuizDto: EndQuizDto, userId: string) {
-        await this.quizModel.updateOne(
+        const quiz = await this.quizModel.findOneAndUpdate(
             {
                 _id: new Types.ObjectId(endQuizDto.quizId),
                 userId: new Types.ObjectId(userId),
@@ -66,6 +70,19 @@ export class QuizService {
                 endReason: endQuizDto.reason,
             },
         );
+
+        await this.accountQuizAward(quiz, userId);
+    }
+
+    async accountQuizAward(quiz: QuizDocument, userId: string) {
+        await this.usersService.updateOne(userId, {
+            $inc: {
+                points: quiz.points,
+                'stat.gamesPlayed': 1,
+                'stat.correctAnswers': quiz.correctAnswers,
+                'stat.answersPlayed': quiz.stage,
+            },
+        });
     }
 
     async answerQuizQuestion(
@@ -117,22 +134,18 @@ export class QuizService {
             }
         }
 
-        if (isFinished) {
-            // учесть заработанные баллы в данные игрока
-            // учесть статистику игры в данные игрока
-        }
-
         const scoreAward = isRight
             ? Math.floor(quiz.roundDifficulty * quiz.questionDifficulty * GLOBAL_DIFFICULTY_K * 10) / 10
             : 0;
         await quiz.updateOne({
             $inc: {
-                stage: 1,
+                stage: isFinished ? 0 : 1,
                 points: scoreAward,
                 roundDifficulty:
                     quiz.type === QuizType.FirstMistake
                         ? QuizConfigs[quiz.type].roundSpecific.roundDifficultyImproves
                         : 0,
+                correctAnswers: isRight ? 1 : 0,
             },
             currentQuestion: isFinished ? '' : nextQuestion?._id,
             questionDifficulty: nextQuestion?.difficulty,
@@ -141,10 +154,15 @@ export class QuizService {
             questionWasAnswered: true,
         });
 
+        if (isFinished) {
+            await this.accountQuizAward(quiz, userId);
+        }
+
         return {
             isFinished,
             isRight,
             scoreAward,
+            endReason: isFinished ? endReason : null,
         };
     }
 
@@ -152,19 +170,17 @@ export class QuizService {
         getNextQuestionDto: GetNextQuestionDto,
         userId: string,
     ): Promise<GetNextQuestionResponse> {
-        const quiz = await this.quizModel
-            .findOne({
-                _id: new Types.ObjectId(getNextQuestionDto.quizId),
-                userId: new Types.ObjectId(userId),
-            })
-            .populate('currentQuestion');
+        const quiz = await this.quizModel.findOne({
+            _id: new Types.ObjectId(getNextQuestionDto.quizId),
+            userId: new Types.ObjectId(userId),
+        });
+        // .populate('currentQuestion');
 
-        if (quiz.isFinished || !quiz.currentQuestion)
-            throw new BadRequestException('Quiz does not have next question!');
+        if (quiz.isFinished || !quiz.currentQuestion) throw new BadRequestException(Errors.NoQuestion);
 
-        // const question = await this.questionsService.findOne({
-        //     _id: quiz.currentQuestion,
-        // });
+        const question = await this.questionsService.findOne({
+            _id: quiz.currentQuestion,
+        });
 
         await quiz.updateOne({
             questionRequestedAt: new Date(),
@@ -172,9 +188,7 @@ export class QuizService {
         });
 
         return {
-            question: this.questionsConverter.mapQuestionDocumentToResponse(
-                quiz.currentQuestion as QuestionDocument,
-            ),
+            question,
         };
     }
 

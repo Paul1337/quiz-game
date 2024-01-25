@@ -4,7 +4,7 @@ import { Role } from 'src/auth/role.enum';
 
 export interface UserStatScheme {
     gamesPlayed: number;
-    correctAsnwers: number;
+    correctAnswers: number;
     answersPlayed: number;
 }
 
@@ -49,7 +49,7 @@ export class User {
     @Prop(
         raw({
             gamesPlayed: Number,
-            correctAsnwers: Number,
+            correctAnswers: Number,
             answersPlayed: Number,
         }),
     )

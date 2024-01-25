@@ -1,23 +1,46 @@
+import { FC, PropsWithChildren } from 'react';
 import { useAppSelector } from '../../../app/store/store.model';
 import { Spinner } from '../../../shared/ui/UtilityComponents/Spinner/Spinner';
 import { FinishedContent } from '../FinishedContent/FinishedContent';
 import { Question } from '../Question/Question';
+import { GameStage } from '../../slices/quizSlice.model';
+import { PregameTimer } from '../PregameTimer/PregameTimer';
+import { QuizErrorView } from '../QuizErrorView/QuizErrorView';
 
-export const QuizContent = () => {
-    const isLoadingQuestion = useAppSelector(state => state.quiz.isLoadingQuestion);
-    const isQuizFinished = useAppSelector(state => state.quiz.isFinished);
+const ContentLayout: FC<PropsWithChildren> = ({ children }) => (
+    <div className='flex justify-center min-h-32 bg-second-bg m-2 rounded-md'>{children}</div>
+);
 
-    return (
-        <div className='flex justify-center min-h-32 bg-second-bg m-2 rounded-md'>
-            {isQuizFinished ? (
-                <FinishedContent />
-            ) : isLoadingQuestion ? (
+const Content = () => {
+    const gameStage = useAppSelector(state => state.quiz.gameStage);
+
+    switch (gameStage) {
+        case GameStage.Loading:
+            return (
                 <div className='flex justify-center items-center'>
                     <Spinner />
                 </div>
-            ) : (
-                <Question className='w-full' />
-            )}
-        </div>
+            );
+
+        case GameStage.PregameTimer:
+            return <PregameTimer />;
+
+        case GameStage.Playing:
+        case GameStage.AnswerGiven:
+            return <Question className='w-full' />;
+
+        case GameStage.Finished:
+            return <FinishedContent />;
+
+        case GameStage.Error:
+            return <QuizErrorView />;
+    }
+};
+
+export const QuizContent = () => {
+    return (
+        <ContentLayout>
+            <Content />
+        </ContentLayout>
     );
 };

@@ -1,13 +1,16 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { useAppSelector } from '../../../app/store/store.model';
+import { useAppDispatch, useAppSelector } from '../../../app/store/store.model';
+import { EndQuizReason, GameStage } from '../../slices/quizSlice.model';
+import { thunkEndQuiz } from '../../services/endQuiz';
 
-export interface QuestionTimerProps {
-    timeoutCallback?: () => void;
-}
+export interface QuestionTimerProps {}
 
-export const QuestionTimer: FC<QuestionTimerProps> = ({ timeoutCallback }) => {
+export const QuestionTimer: FC<QuestionTimerProps> = () => {
     const questionTime = useAppSelector(state => state.quiz.quizConfig!.questionTime);
-    const quizStage = useAppSelector(state => state.quiz.stat.stage);
+    const quizQuestionStage = useAppSelector(state => state.quiz.stat.stage);
+    const quizGameStage = useAppSelector(state => state.quiz.gameStage);
+    const quizId = useAppSelector(state => state.quiz.quizId);
+    const dispatch = useAppDispatch();
 
     const [time, setTime] = useState(questionTime);
     const interval = useRef<number | null>(null);
@@ -15,19 +18,23 @@ export const QuestionTimer: FC<QuestionTimerProps> = ({ timeoutCallback }) => {
     useEffect(() => {
         setTime(questionTime);
         if (interval.current) clearInterval(interval.current);
-        interval.current = setInterval(() => {
-            setTime(time => {
-                if (--time === 0) {
-                    timeoutCallback?.();
-                }
-                return time;
-            });
-        }, 1000);
-
+        interval.current = setInterval(() => setTime(time => --time), 1000);
         return () => {
             if (interval.current) clearInterval(interval.current);
         };
-    }, [quizStage]);
+    }, [quizQuestionStage]);
+
+    useEffect(() => {
+        if (time === 0) {
+            dispatch(thunkEndQuiz({ quizId, reason: EndQuizReason.Timedout }));
+        }
+    }, [time]);
+
+    useEffect(() => {
+        if (quizGameStage === GameStage.AnswerGiven) {
+            interval.current && clearInterval(interval.current);
+        }
+    }, [quizGameStage]);
 
     return (
         <div className='flex justify-center p-2'>

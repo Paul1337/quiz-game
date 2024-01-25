@@ -8,10 +8,8 @@ import { UserQuestions } from './schemas/userQuestions.schema';
 import { AnswerQuestionDto } from './dto/answer-question-dto';
 import { QuestionResponse } from './responses/question.response';
 import { QuestionsConverter } from './questions.converter';
-
-export interface CheckQuestionAnswerResponse {
-    isRight: boolean;
-}
+import { CheckQuestionAnswerResponse } from './responses/check-question-answer.response';
+import { Errors } from './constants/error.constants';
 
 @Injectable()
 export class QuestionsService {
@@ -54,7 +52,7 @@ export class QuestionsService {
 
         if (questions.length === 0) {
             if (getQuestionDto.minDifficulty === 1 && getQuestionDto.maxDifficulty === 10) {
-                throw new InternalServerErrorException('No questions found!');
+                throw new InternalServerErrorException(Errors.NoQuestion);
             } else {
                 console.log('Could not find any, fallbacking to any difficulty');
                 return this.getQuestion(

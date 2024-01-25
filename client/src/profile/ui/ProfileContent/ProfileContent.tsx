@@ -5,6 +5,8 @@ export const ProfileContent = () => {
     if (!profileData) return <>No profile data</>;
     const { points, firstName, lastName, stat } = profileData;
 
+    console.log('stat:', stat);
+
     return (
         <div className='bg-second-bg p-2 m-2'>
             <div className='text-xl text-main'>
@@ -21,7 +23,7 @@ export const ProfileContent = () => {
                 <p className='mt-2 text-black'>
                     Дано правильных ответов:{' '}
                     <span className='font-medium'>
-                        {stat.correctAsnwers} из {stat.answersPlayed}
+                        {stat.correctAnswers} из {stat.answersPlayed}
                     </span>
                 </p>
             </div>

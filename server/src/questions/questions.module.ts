@@ -5,6 +5,7 @@ import { QuestionsService } from './questions.service';
 import { Question, QuestionSchema } from './schemas/question.schema';
 import { UserQuestions, UserQuestionsSchema } from './schemas/userQuestions.schema';
 import { QuestionsConverter } from './questions.converter';
+import { LibModule } from 'src/lib/lib.module';
 
 @Module({
     imports: [

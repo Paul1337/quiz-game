@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { StartQuizDto } from './dto/start-quiz.dto';
-import { start } from 'repl';
 import { RequestExtended } from 'src/auth/lib/request-extension';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/role.enum';

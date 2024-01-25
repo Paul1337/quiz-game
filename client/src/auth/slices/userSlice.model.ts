@@ -14,7 +14,7 @@ export interface UserDataScheme {
 
 export interface UserStatScheme {
     gamesPlayed: number;
-    correctAsnwers: number;
+    correctAnswers: number;
     answersPlayed: number;
 }
 

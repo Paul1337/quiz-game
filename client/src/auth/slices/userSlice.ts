@@ -13,7 +13,7 @@ const initialState: UserSliceScheme = {
     //     lastName: 'Дьяченко',
     //     stat: {
     //         answersPlayed: 0,
-    //         correctAsnwers: 0,
+    //         correctAnswers: 0,
     //         gamesPlayed: 0,
     //     },
     // },
