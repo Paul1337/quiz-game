@@ -12,11 +12,11 @@ export const Modal: FC<ModalProps> = props => {
     const { onClose, children, className } = props;
 
     return createPortal(
-        <div className='w-screen h-screen absolute left-0 top-0 bg-[#0000005e]' onClick={onClose}>
+        <div className='w-screen z-10 h-screen absolute left-0 top-0 bg-[#0000005e]' onClick={onClose}>
             <div
                 onClick={e => e.stopPropagation()}
                 className={twMerge(
-                    'absolute border rounded-md left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-50 dark:bg-gray-900 p-4 ',
+                    'absolute border rounded-md left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-50 dark:bg-gray-900 p-4 min-w-80 min-h-80 ',
                     className
                 )}
             >

@@ -1,9 +1,13 @@
 import { withProviders } from '../../lib/withProviders';
 import { AppRouter } from '../AppRouter/AppRouter';
-import './App.css';
+import '../../styles/App.css';
+import { GlobalBackground } from '../GlobalBackground/GlobalBackground';
 
-const App = () => {
-    return <AppRouter></AppRouter>;
-};
-
-export default withProviders(App);
+export const App = withProviders(() => {
+    return (
+        <>
+            <GlobalBackground />
+            <AppRouter></AppRouter>
+        </>
+    );
+});

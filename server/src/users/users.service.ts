@@ -1,8 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { User, UserDocument } from './schemas/user.schema';
+import { User, UserDocument, UserStatScheme } from './schemas/user.schema';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
+import { Role } from 'src/auth/role.enum';
+
+export interface GetUserProfileResponse {
+    firstName: string;
+    lastName: string;
+    points: number;
+    stat: UserStatScheme;
+}
 
 @Injectable()
 export class UsersService {
@@ -20,6 +28,19 @@ export class UsersService {
             .exec();
     }
 
+    async getUserProfile(userId: string): Promise<GetUserProfileResponse> {
+        const user = await this.findOne({
+            _id: new Types.ObjectId(userId),
+        });
+
+        return {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            stat: user.stat,
+            points: user.points,
+        };
+    }
+
     async findOne(findUserDto: Record<string, any>) {
         const user = await this.userModel.findOne<UserDocument>(findUserDto).exec();
         return user;
@@ -32,6 +53,7 @@ export class UsersService {
             firstName: createUserDto.firstName,
             lastName: createUserDto.lastName,
             password: createUserDto.password,
+            roles: [Role.Player],
         });
         await newUser.save();
         return newUser;

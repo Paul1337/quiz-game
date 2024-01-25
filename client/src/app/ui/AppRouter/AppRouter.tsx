@@ -1,42 +1,19 @@
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { LoginPage } from '../../../auth/ui/LoginPage/LoginPage';
-import { RegPage } from '../../../auth/ui/RegPage/RegPage';
-import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
-import { authFullRoutes, authRoutes } from '../../../auth/config/routes.config';
-import { menuFullRoutes } from '../../../menu/config/routes.config';
-import { MenuPage } from '../../../menu/ui/MenuPage/MenuPage';
+import { menuRoutesList } from '../../../menu/routes/menuRoutes';
+import { quizRoutesList } from '../../../quiz/routes/quizRoutes';
+import { AuthRoutes, authRoutesList } from '../../../auth/routes/authRoutes';
+import { profileRoutesList } from '../../../profile/routes/profileRoutes';
+import { adminRoutesList } from '../../../admin/routes/adminRoutes';
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <PrivateRoute />,
-        children: [
-            {
-                path: menuFullRoutes.MenuPage,
-                element: <MenuPage />,
-            },
-        ],
-    },
-    {
-        path: authRoutes.Prefix,
-        children: [
-            {
-                path: authRoutes.RegPage,
-                element: <RegPage />,
-            },
-            {
-                path: authRoutes.LoginPage,
-                element: <LoginPage />,
-            },
-            {
-                path: '*?',
-                element: <Navigate to={authFullRoutes.LoginPage} />,
-            },
-        ],
-    },
+    ...authRoutesList,
+    ...quizRoutesList,
+    ...menuRoutesList,
+    ...profileRoutesList,
+    ...adminRoutesList,
     {
         path: '*?',
-        element: <Navigate to={authFullRoutes.LoginPage} />,
+        element: <Navigate to={AuthRoutes.Login} />,
     },
 ]);
 

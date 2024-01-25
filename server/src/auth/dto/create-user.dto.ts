@@ -9,7 +9,7 @@ export class CreateUserDto {
     email: string;
 
     @IsNotEmpty()
-    @Length(3)
+    @Length(5)
     password: string;
 
     @IsNotEmpty()

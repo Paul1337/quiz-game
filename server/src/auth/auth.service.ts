@@ -10,33 +10,37 @@ import bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LogInUserDto } from './dto/log-in-user.dto';
-import { UserPayloadScheme } from './model/request.model';
+import { UserPayloadScheme } from './lib/request-extension';
+import { Role } from './role.enum';
 
 @Injectable()
 export class AuthService {
     constructor(
         private jwtService: JwtService,
-        private usersService: UsersService
+        private usersService: UsersService,
     ) {}
 
     async logIn(loginUserDto: LogInUserDto) {
         const user = await this.usersService.findOne({
             username: loginUserDto.username,
         });
-        if (!user) throw new ForbiddenException(`User with username '${loginUserDto.username}' not found`);
+        if (!user)
+            throw new ForbiddenException(`User with username '${loginUserDto.username}' not found`);
 
         const passwordHash = user.password;
         if (!bcrypt.compareSync(loginUserDto.password, passwordHash)) {
             throw new ForbiddenException('Password is not correct');
         }
 
-        console.log('pass ok');
+        console.log('password ok');
 
         const payload: UserPayloadScheme = {
             email: user.email,
             username: user.username,
+            roles: user.roles,
             id: user._id.toString(),
         };
+
         return {
             authToken: await this.jwtService.signAsync(payload),
             userData: payload,

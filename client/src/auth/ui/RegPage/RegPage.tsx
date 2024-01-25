@@ -1,57 +1,40 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { DataScheme, Form, InputData } from '../../../shared/ui/Form/form';
+import { AuthRoutes } from '../../routes/authRoutes';
 import { AuthPageWrapper } from '../AuthPageWrapper/AuthPageWrapper';
-import { authFullRoutes } from '../../config/routes.config';
-
-const FormInputs: InputData[] = [
-    {
-        label: 'username',
-        key: 'username',
-    },
-    {
-        label: 'имя',
-        key: 'firstName',
-    },
-    {
-        label: 'фамилия',
-        key: 'lastName',
-    },
-    {
-        label: 'email',
-        key: 'email',
-    },
-    {
-        label: 'пароль',
-        key: 'password',
-    },
-
-    {
-        label: 'повторите пароль',
-        key: 'confirmPassword',
-    },
-];
+import { FormInputs } from './formInputs';
+import { useAppDispatch } from '../../../app/store/store.model';
+import { thunkRegister } from '../../services/register';
+import { DataScheme, Form } from '../../../shared/ui/FormComponents/Form/Form';
 
 export const RegPage = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const handleSubmit = (data: DataScheme) => {
         console.log('data', data);
-        if (data.password === data.confirmPassword) {
-            // const data = { username, email, password };
-            // console.log('form data', data);
-            // dispatch(thunkRegister(data))
-            //     .then(() => {
-            //         navigate('/auth/login');
-            //     })
-            //     .catch(e => {
-            //         console.log(e.response.data.message);
-            //         setError(e.response?.data?.message?.join('; '));
-            //     });
-        } else {
+        if (data.password !== data.confirmPassword) {
             setError('Пароли не совпадают');
+            return;
         }
+        dispatch(
+            thunkRegister({
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                password: data.password,
+                username: data.username,
+            })
+        )
+            .unwrap()
+            .then(res => {
+                navigate(AuthRoutes.Login);
+            })
+            .catch((errors: string[]) => {
+                setError('Проверьте данные');
+                console.log(errors);
+            });
     };
 
     return (
@@ -67,7 +50,7 @@ export const RegPage = () => {
                     Уже зарегестрированы?
                     <Link
                         className='font-medium ml-2 text-primary-600 hover:underline dark:text-primary-500'
-                        to={authFullRoutes.LoginPage}
+                        to={AuthRoutes.Login}
                     >
                         Войти
                     </Link>

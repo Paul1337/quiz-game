@@ -1,11 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { thunkLogin } from '../services/login';
+import { thunkRegister } from '../services/register';
 import { UserDataScheme, UserProfileData, UserSliceScheme } from './userSlice.model';
 
 const initialState: UserSliceScheme = {
     isAuthed: false,
     userData: null,
     profileData: null,
+    // {
+    //     points: 0,
+    //     firstName: 'Павел',
+    //     lastName: 'Дьяченко',
+    //     stat: {
+    //         answersPlayed: 0,
+    //         correctAsnwers: 0,
+    //         gamesPlayed: 0,
+    //     },
+    // },
 };
 
 export const userSlice = createSlice({
@@ -21,6 +32,11 @@ export const userSlice = createSlice({
         setProfileData(state: UserSliceScheme, action: PayloadAction<UserProfileData>) {
             state.profileData = action.payload;
         },
+    },
+    extraReducers: builder => {
+        builder.addCase(thunkLogin.fulfilled, (state, action) => {});
+        builder.addCase(thunkLogin.rejected, (state, action) => {});
+        builder.addCase(thunkRegister.fulfilled, (state, action) => {});
     },
 });
 

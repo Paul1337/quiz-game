@@ -1,10 +1,16 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Mongoose, Types } from 'mongoose';
+import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+import { Role } from 'src/auth/role.enum';
 
-export type UserDocument = HydratedDocument<User>;
+export interface UserStatScheme {
+    gamesPlayed: number;
+    correctAsnwers: number;
+    answersPlayed: number;
+}
 
 @Schema({
     collection: 'users',
+    timestamps: true,
 })
 export class User {
     _id: Types.ObjectId;
@@ -26,14 +32,32 @@ export class User {
     })
     password: string;
 
-    @Prop()
-    firstName: string;
+    @Prop({
+        required: true,
+    })
+    roles: Role[];
+
+    @Prop({ required: true })
+    points: number;
 
     @Prop()
-    lastName: string;
+    firstName?: string;
 
     @Prop()
-    profileImg: string;
+    lastName?: string;
+
+    @Prop(
+        raw({
+            gamesPlayed: Number,
+            correctAsnwers: Number,
+            answersPlayed: Number,
+        }),
+    )
+    stat: UserStatScheme;
+
+    @Prop()
+    profileImg?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+export type UserDocument = HydratedDocument<User>;
