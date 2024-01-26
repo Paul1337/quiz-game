@@ -2,6 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store/store.model';
 import { EndQuizReason, GameStage } from '../../slices/quizSlice.model';
 import { thunkEndQuiz } from '../../services/endQuiz';
+import { TimerId } from '../../../shared/lib/models/timerId';
 
 export interface QuestionTimerProps {}
 
@@ -13,7 +14,7 @@ export const QuestionTimer: FC<QuestionTimerProps> = () => {
     const dispatch = useAppDispatch();
 
     const [time, setTime] = useState(questionTime);
-    const interval = useRef<number | null>(null);
+    const interval = useRef<TimerId | null>(null);
 
     useEffect(() => {
         setTime(questionTime);

@@ -5,13 +5,14 @@ import { GameStage } from '../slices/quizSlice.model';
 import { quizConfig } from '../config/quizConfig';
 import { quizActions } from '../slices/quizSlice';
 import { thunkGetNextQuestion } from '../services/getNextQuestion';
+import { TimerId } from '../../shared/lib/models/timerId';
 
 export const useQuiz = () => {
     const dispatch = useAppDispatch();
     const quizId = useAppSelector(state => state.quiz.quizId);
     const quizStage = useAppSelector(state => state.quiz.gameStage);
     const quizFinished = useAppSelector(state => state.quiz.isFinished);
-    const timer = useRef<number | null>(null);
+    const timer = useRef<TimerId | null>(null);
 
     useEffect(() => {
         dispatch(thunkStartQuiz());

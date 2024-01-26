@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
-import downArrowImg from '../../assets/down-arrow.svg';
-import upArrowImg from '../../assets/up-arrow.svg';
-import checkMarkImg from '../../assets/check-mark.svg';
+import DownArrowLogo from '../../assets/down-arrow.svg?react';
+import UpArrowLogo from '../../assets/up-arrow.svg?react';
+import CheckMarkLogo from '../../assets/check-mark.svg?react';
 import classNames from 'classnames';
 
 interface SelectorProps {
@@ -37,14 +37,19 @@ const Selector: FC<SelectorProps> = props => {
                 >
                     <p className='m-2 text-lg'>{selected}</p>
                     <span className='block relative w-6 h-6 mr-1 rounded-md cursor-pointer'>
-                        <span
-                            style={{
-                                backgroundImage: `url(${showOptions ? upArrowImg : downArrowImg})`,
-                            }}
-                            className={classNames(
-                                'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block bg-cover bg-center w-4 h-4 rounded-md'
-                            )}
-                        ></span>
+                        {showOptions ? (
+                            <UpArrowLogo
+                                className={classNames(
+                                    'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block bg-cover bg-center w-4 h-4 rounded-md'
+                                )}
+                            />
+                        ) : (
+                            <DownArrowLogo
+                                className={classNames(
+                                    'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block bg-cover bg-center w-4 h-4 rounded-md'
+                                )}
+                            />
+                        )}
                     </span>
 
                     {showOptions && (
@@ -59,13 +64,11 @@ const Selector: FC<SelectorProps> = props => {
                                     }}
                                 >
                                     <span>{option}</span>
-                                    <span
-                                        style={{
-                                            backgroundImage:
-                                                option === selected ? `url(${checkMarkImg})` : 'unset',
-                                        }}
-                                        className='bg-cover bg-center w-4 h-4 ml-4 inline-block'
-                                    ></span>
+                                    <CheckMarkLogo
+                                        className={classNames('bg-cover bg-center w-4 h-4 ml-4 inline-block', {
+                                            'opacity-0': option !== selected,
+                                        })}
+                                    ></CheckMarkLogo>
                                 </div>
                             ))}
                         </div>

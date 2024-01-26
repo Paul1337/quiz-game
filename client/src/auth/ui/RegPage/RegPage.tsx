@@ -13,7 +13,7 @@ export const RegPage = () => {
     const dispatch = useAppDispatch();
 
     const handleSubmit = (data: DataScheme) => {
-        console.log('data', data);
+        // console.log('data', data);
         if (data.password !== data.confirmPassword) {
             setError('Пароли не совпадают');
             return;

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import homeImg from '../../../../assets/home.svg';
+import HomeLogo from '../../../../assets/home.svg?react';
 import { twMerge } from 'tailwind-merge';
 import { useNavigate } from 'react-router-dom';
 import { MenuRotes } from '../../../../../menu/routes/menuRoutes';
@@ -17,13 +17,12 @@ export const HomeButton: FC<HomeButtonProps> = props => {
     };
 
     return (
-        <span
+        <HomeLogo
             className={twMerge(
                 'block w-8 h-8 bg-cover bg-center cursor-pointer hover:opacity-80 invert-[42%] sepia-[1%] saturate-[842%] hue-rotate-[39deg] brightness-[92%] contrast-[89%]',
                 className
             )}
-            style={{ backgroundImage: `url(${homeImg})` }}
             onClick={handleClick}
-        ></span>
+        ></HomeLogo>
     );
 };

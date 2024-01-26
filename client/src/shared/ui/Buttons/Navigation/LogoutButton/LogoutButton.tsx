@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import homeImg from '../../../../assets/logout3.svg';
+import HomeLogo from '../../../../assets/logout3.svg?react';
 import { twMerge } from 'tailwind-merge';
 import { useAppDispatch } from '../../../../../app/store/store.model';
 import { userActions } from '../../../../../auth/slices/userSlice';
@@ -19,13 +19,9 @@ export const LogoutButton: FC<LogoutButtonProps> = props => {
     };
 
     return (
-        <span
-            className={twMerge(
-                'block w-8 h-8 bg-cover bg-center cursor-pointer hover:opacity-80',
-                className
-            )}
-            style={{ backgroundImage: `url(${homeImg})` }}
+        <HomeLogo
+            className={twMerge('block w-8 h-8 bg-cover bg-center cursor-pointer hover:opacity-80', className)}
             onClick={handleClick}
-        ></span>
+        ></HomeLogo>
     );
 };
