@@ -25,16 +25,29 @@ interface FormProps {
     children?: ReactNode;
     layoutClassName?: string;
     className?: string;
+    clearOnSubmit?: boolean;
 }
 
 export const Form: FC<FormProps> = props => {
-    const { onSubmit, error, inputs, action, title, children, className, layoutClassName } = props;
+    const {
+        onSubmit,
+        error,
+        inputs,
+        action,
+        title,
+        children,
+        className,
+        layoutClassName,
+        clearOnSubmit,
+    } = props;
     const [data, setData] = useState<DataScheme>({});
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         onSubmit(data);
-        setData({});
+        if (clearOnSubmit) {
+            setData({});
+        }
     };
 
     return (

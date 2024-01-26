@@ -54,17 +54,25 @@ export class UsersService {
             lastName: createUserDto.lastName,
             password: createUserDto.password,
             roles: [Role.Player],
+            points: 0,
+            stat: {
+                answersPlayed: 0,
+                correctAnswers: 0,
+                gamesPlayed: 0,
+            },
         });
         await newUser.save();
         return newUser;
     }
 
     async updateOne(userId: string, data: Record<string, any>) {
-        await this.userModel.updateOne(
-            {
-                _id: new Types.ObjectId(userId),
-            },
-            data,
-        );
+        await this.userModel
+            .updateOne(
+                {
+                    _id: new Types.ObjectId(userId),
+                },
+                data,
+            )
+            .exec();
     }
 }

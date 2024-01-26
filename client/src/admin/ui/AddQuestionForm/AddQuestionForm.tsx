@@ -39,6 +39,7 @@ export const AddQuestionForm = () => {
                 onSubmit={handleSubmit}
                 inputs={FormInputs}
                 className='p-0'
+                clearOnSubmit={true}
             ></Form>
             {successModal.isShowing && <SuccessModal onClose={successModal.hide} />}
         </>

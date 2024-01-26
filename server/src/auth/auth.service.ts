@@ -57,9 +57,8 @@ export class AuthService {
         try {
             await this.usersService.createOne(createUserDto);
         } catch (err) {
-            throw new BadRequestException([
-                'Check your email and username, they must be unique across all accounts',
-            ]);
+            console.log(err);
+            throw new BadRequestException(['Could not create user']);
         }
         return {
             message: 'ok',
