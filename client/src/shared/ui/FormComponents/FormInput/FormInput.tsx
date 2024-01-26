@@ -86,13 +86,15 @@ export const FormInput: FC<FormInputProps> = props => {
                 ></select>
             )}
 
-            <p
-                className={classNames('text-red-700 text-sm m-0.5 transition-none', {
-                    'opacity-0': !validationError,
-                })}
-            >
-                {validationError || 'пусто'}
-            </p>
+            {validationError && (
+                <p
+                    className={classNames('text-red-700 text-sm m-0.5 transition-none', {
+                        'opacity-0': !validationError,
+                    })}
+                >
+                    {validationError || 'пусто'}
+                </p>
+            )}
         </div>
     );
 };

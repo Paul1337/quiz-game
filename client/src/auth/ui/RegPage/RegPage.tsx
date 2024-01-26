@@ -31,8 +31,8 @@ export const RegPage = () => {
             .then(res => {
                 navigate(AuthRoutes.Login);
             })
-            .catch((errors: string[]) => {
-                setError('Проверьте данные');
+            .catch((errors: string[] | string) => {
+                setError(Array.isArray(errors) ? errors[0] : errors);
                 console.log(errors);
             });
     };

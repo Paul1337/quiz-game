@@ -14,20 +14,23 @@ interface LoginResponse {
     userData: UserDataScheme;
 }
 
-export const thunkLogin = createAppAsyncThunk('user/login', async (loginData: LoginRequestScheme, thunkApi) => {
-    try {
-        const res = await axiosInstance.post<LoginResponse>('/auth/login', loginData);
+export const thunkLogin = createAppAsyncThunk(
+    'user/login',
+    async (loginData: LoginRequestScheme, thunkApi) => {
+        try {
+            const res = await axiosInstance.post<LoginResponse>('/auth/login', loginData);
 
-        thunkApi.dispatch(userActions.setAuthed(true));
-        const { authToken, userData } = res.data;
+            thunkApi.dispatch(userActions.setAuthed(true));
+            const { authToken, userData } = res.data;
 
-        thunkApi.dispatch(userActions.setUserData(userData));
-        authLocalStore.setAuthToken(authToken);
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+            thunkApi.dispatch(userActions.setUserData(userData));
+            authLocalStore.setAuthToken(authToken);
+            axiosInstance.defaults.headers['Authorization'] = `Bearer ${authToken}`;
 
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        return thunkApi.rejectWithValue([]);
+            return res.data;
+        } catch (err) {
+            console.log(err);
+            return thunkApi.rejectWithValue([]);
+        }
     }
-});
+);

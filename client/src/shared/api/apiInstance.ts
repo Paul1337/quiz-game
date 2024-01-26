@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { authLocalStore } from '../../auth/local-store/authLocalStore';
 
 export const axiosInstance = axios.create({

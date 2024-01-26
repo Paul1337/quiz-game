@@ -51,14 +51,21 @@ export class AuthService {
         const userWithSameUsername = await this.usersService.findOne({
             username: createUserDto.username,
         });
-        if (userWithSameUsername)
-            throw new HttpException(`User with username ${createUserDto.username} already exists`, 500);
+        if (userWithSameUsername) {
+            throw new BadRequestException([
+                `Пользователь с username ${createUserDto.username} уже существует`,
+            ]);
+        }
         createUserDto.password = bcrypt.hashSync(createUserDto.password, 5);
         try {
             await this.usersService.createOne(createUserDto);
         } catch (err) {
             console.log(err);
-            throw new BadRequestException(['Could not create user']);
+            if (err.code === 11000 && err.keyPattern.email) {
+                throw new BadRequestException(['Такой email уже используется']);
+            } else {
+                throw new BadRequestException(['Не удаётся создать пользователя']);
+            }
         }
         return {
             message: 'ok',

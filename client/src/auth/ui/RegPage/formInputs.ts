@@ -5,28 +5,28 @@ export const FormInputs: InputData[] = [
         label: 'username',
         key: 'username',
         inputProps: {
-            minLength: 4,
+            // minLength: 4,
         },
     },
     {
         label: 'имя',
         key: 'firstName',
         inputProps: {
-            minLength: 3,
+            // minLength: 3,
         },
     },
     {
         label: 'фамилия',
         key: 'lastName',
         inputProps: {
-            minLength: 3,
+            // minLength: 3,
         },
     },
     {
         label: 'email',
         key: 'email',
         inputProps: {
-            isEmail: true,
+            // isEmail: true,
         },
     },
     {
@@ -34,7 +34,7 @@ export const FormInputs: InputData[] = [
         key: 'password',
         type: 'password',
         inputProps: {
-            minLength: 5,
+            // minLength: 5,
         },
     },
     {
