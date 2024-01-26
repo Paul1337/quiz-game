@@ -1,0 +1,39 @@
+version: '3.8'
+name: quiz-game
+
+services:
+    mongo:
+        build:
+            context: .
+            dockerfile: Dockerfile.mongo
+        container_name: quiz-game_mongo
+        restart: unless-stopped
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+        volumes:
+            - mongo-data:/data/db
+        networks:
+            - quiz-game-net
+        ports:
+            - 27015:27017
+
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile.app
+        container_name: quiz-game_app
+        restart: unless-stopped
+        networks:
+            - quiz-game-net
+        ports:
+            - 8006:3000
+        depends_on:
+            - mongo
+
+networks:
+    quiz-game-net:
+        driver: bridge
+
+volumes:
+    mongo-data:

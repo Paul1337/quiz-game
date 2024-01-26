@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from 'src/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Console } from 'console';
 import { QuestionsModule } from 'src/questions/questions.module';
 import { QuizModule } from 'src/quiz/quiz.module';
 import { LibModule } from 'src/lib/lib.module';
@@ -14,7 +13,7 @@ import path from 'path';
 @Module({
     imports: [
         ServeStaticModule.forRoot({
-            rootPath: path.join(__dirname, '..', 'static'),
+            rootPath: path.join(__dirname, '../../static'),
         }),
         ConfigModule.forRoot({
             isGlobal: true,
@@ -23,7 +22,6 @@ import path from 'path';
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: async (config: ConfigService) => {
-                console.log('uri', config.get<string>('MONGODB_URI'));
                 const user = encodeURIComponent(config.get<string>('DB_USER'));
                 const host = config.get<string>('DB_HOST');
                 const password = encodeURIComponent(config.get<string>('DB_PASSWORD'));
