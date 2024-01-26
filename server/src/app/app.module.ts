@@ -8,9 +8,14 @@ import { Console } from 'console';
 import { QuestionsModule } from 'src/questions/questions.module';
 import { QuizModule } from 'src/quiz/quiz.module';
 import { LibModule } from 'src/lib/lib.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import path from 'path';
 
 @Module({
     imports: [
+        ServeStaticModule.forRoot({
+            rootPath: path.join(__dirname, '..', 'static'),
+        }),
         ConfigModule.forRoot({
             isGlobal: true,
         }),
