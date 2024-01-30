@@ -17,7 +17,9 @@ export const MenuContent = () => {
             <div className='flex flex-row h-96'>
                 <div className='flex flex-col justify-between gap-2 border border-main-transparent m-2 rounded-md w-72 bg-second-bg'>
                     <GameSelector />
-                    <PlayButton onClick={handleStartClick}>Начать игру</PlayButton>
+                    <PlayButton className='hover:bg-green-100' onClick={handleStartClick}>
+                        Начать игру
+                    </PlayButton>
                 </div>
                 <GameDescription />
             </div>
