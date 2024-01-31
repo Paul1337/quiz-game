@@ -9,7 +9,10 @@ export const MenuNav = () => {
     const { roles } = useAuth();
     return (
         <PageHeader>
-            <h1 className='font-medium text-main text-2xl ml-2'>Simple Quiz: викторина</h1>
+            <h1 className='text-main text-2xl ml-2'>
+                <span className='font-medium hidden md:inline-block'>Simple Quiz: викторина</span>
+                <span className='font-medium md:hidden'>Simple Quiz</span>
+            </h1>
             <div className='flex items-center gap-2'>
                 <ProfileButton fill='#656663' />
                 {roles.includes(Role.Admin) && <AdminButton />}

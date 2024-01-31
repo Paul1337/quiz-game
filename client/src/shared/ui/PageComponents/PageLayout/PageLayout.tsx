@@ -8,5 +8,14 @@ interface PageLayoutProps {
 
 export const PageLayout: FC<PageLayoutProps> = props => {
     const { className, children } = props;
-    return <div className={twMerge('my-6 mx-20 relative z-10', className)}>{children}</div>;
+    return (
+        <div
+            className={twMerge(
+                'flex flex-col justify-start h-full m-0 p-1 md:py-4 md:px-10 lg:py-6 lg:px-20 relative z-10',
+                className
+            )}
+        >
+            {children}
+        </div>
+    );
 };

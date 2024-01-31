@@ -19,7 +19,7 @@ export const ProfileButton: FC<ProfileButtonProps> = props => {
             onClick={handleClick}
             className={twMerge('flex flex-row items-center cursor-pointer hover:opacity-80', className)}
         >
-            <span className='font-medium text-main'>Профиль</span>
+            <span className='font-medium text-main hidden md:inline-block'>Профиль</span>
             <svg
                 className={'w-8 h-8 m-2'}
                 width='800px'

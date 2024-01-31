@@ -20,14 +20,14 @@ export const GameSelector: FC<GameSelectorProps> = props => {
     return (
         <div className={className}>
             <Selector
-                className='m-4'
+                className='m-4 text-center sm:text-left'
                 label='Выбор режима игры'
                 options={gameModes}
                 defaultOption={DefaultGameSettings.mode}
                 onChange={mode => dispatch(gameSettingsActions.setMode(mode as GameMode))}
             />
             <Selector
-                className='m-4'
+                className='m-4 text-center sm:text-left'
                 label='Выбор сложности'
                 options={gameDifficulties}
                 defaultOption={DefaultGameSettings.difficulty}

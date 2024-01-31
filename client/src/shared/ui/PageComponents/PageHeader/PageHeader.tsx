@@ -10,7 +10,10 @@ export const PageHeader: FC<PageHeaderProps> = props => {
     const { children, className } = props;
     return (
         <div
-            className={twMerge('bg-main-bg p-2 flex justify-between items-center rounded-md', className)}
+            className={twMerge(
+                'bg-main-bg p-2 flex justify-between items-center rounded-md overflow-hidden',
+                className
+            )}
         >
             {children}
         </div>
