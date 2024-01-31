@@ -8,7 +8,10 @@ export const PlayButton: FC<PlayButtonProps> = props => {
     const { className, ...otherProps } = props;
     return (
         <Button
-            className={twMerge('border-gray-800 text-xl font-medium text-green-700', className)}
+            className={twMerge(
+                'border-gray-800 text-xl font-medium text-green-700 hover:bg-green-100',
+                className
+            )}
             {...otherProps}
         />
     );
